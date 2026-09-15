@@ -1,0 +1,98 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AWSService",
+        "invokedBy": "events.amazonaws.com"
+      },
+      "eventTime": "2026-09-15T18:00:00Z",
+      "eventSource": "sts.amazonaws.com",
+      "eventName": "AssumeRole",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "events.amazonaws.com",
+      "userAgent": "AWS-Events",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::123456789012:role/ScheduledMaintenanceRole",
+        "roleSessionName": "aws-events-scheduler"
+      },
+      "responseElements": {
+        "credentials": {
+          "accessKeyId": "ASIASCHEDULERKEY"
+        }
+      },
+      "eventID": "benign-evt-01",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAPAYMENTSERVICE:payment-worker-1",
+        "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/payment-worker-1",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIAPAYMENTROUTINE",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAPAYMENTSERVICE",
+            "arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+            "accountId": "123456789012",
+            "userName": "PaymentServiceRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T18:05:00Z",
+      "eventSource": "sqs.amazonaws.com",
+      "eventName": "ReceiveMessage",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "10.0.12.34",
+      "userAgent": "aws-sdk-go/v1.44.0",
+      "requestParameters": {
+        "queueUrl": "https://sqs.us-east-1.amazonaws.com/123456789012/payment-events"
+      },
+      "eventID": "benign-evt-02",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAPAYMENTSERVICE:payment-worker-1",
+        "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/payment-worker-1",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIAPAYMENTROUTINE",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAPAYMENTSERVICE",
+            "arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+            "accountId": "123456789012",
+            "userName": "PaymentServiceRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T18:06:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "10.0.12.34",
+      "userAgent": "aws-sdk-go/v1.44.0",
+      "requestParameters": {
+        "bucketName": "payflow-application-logs",
+        "key": "2026/09/app-info.log"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::payflow-application-logs/2026/09/app-info.log"
+        }
+      ],
+      "eventID": "benign-evt-03",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWALICE",
+        "arn": "arn:aws:iam::123456789012:user/Alice",
+        "accountId": "123456789012",
+        "userName": "Alice"
+      },
+      "eventTime": "2026-09-15T15:00:00Z",
+      "eventSource": "sts.amazonaws.com",
+      "eventName": "AssumeRole",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.88",
+      "userAgent": "boto3/1.26.0",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+        "roleSessionName": "Alice-AdHoc"
+      },
+      "responseElements": {
+        "credentials": {
+          "accessKeyId": "ASIAV2ALICEKEY",
+          "expiration": "2026-09-15T16:00:00Z"
+        },
+        "assumedRoleUser": {
+          "assumedRoleId": "AROAPAYMENTSERVICE:Alice-AdHoc",
+          "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/Alice-AdHoc"
+        }
+      },
+      "eventID": "scen2-evt-01",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAPAYMENTSERVICE:Alice-AdHoc",
+        "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/Alice-AdHoc",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIAV2ALICEKEY",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAPAYMENTSERVICE",
+            "arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+            "accountId": "123456789012",
+            "userName": "PaymentServiceRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T15:02:30Z",
+      "eventSource": "kms.amazonaws.com",
+      "eventName": "Decrypt",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "203.0.113.88",
+      "userAgent": "boto3/1.26.0",
+      "requestParameters": {
+        "keyId": "alias/payment-token-key"
+      },
+      "resources": [
+        {
+          "accountId": "123456789012",
+          "type": "AWS::KMS::Key",
+          "ARN": "arn:aws:kms:us-east-1:123456789012:key/c952b658-1f7e-5d4f-0192-40d9053fa4b0"
+        }
+      ],
+      "eventID": "scen2-evt-02",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWDEVJOE",
+        "arn": "arn:aws:iam::123456789012:user/DevJoe",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAIOSFODNN7EXAMPLE",
+        "userName": "DevJoe"
+      },
+      "eventTime": "2026-09-15T14:20:00Z",
+      "eventSource": "sts.amazonaws.com",
+      "eventName": "AssumeRole",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.44",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+        "roleSessionName": "DevJoe"
+      },
+      "responseElements": {
+        "credentials": {
+          "accessKeyId": "ASIAV1PAYMENTKEY123",
+          "expiration": "2026-09-15T15:20:00Z"
+        },
+        "assumedRoleUser": {
+          "assumedRoleId": "AROAPAYMENTSERVICE:DevJoe",
+          "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe"
+        }
+      },
+      "eventID": "scen1-evt-01",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAPAYMENTSERVICE:DevJoe",
+        "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIAV1PAYMENTKEY123",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAPAYMENTSERVICE",
+            "arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+            "accountId": "123456789012",
+            "userName": "PaymentServiceRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T14:22:15Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.44",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "bucketName": "payflow-transaction-data",
+        "key": "2026/09/settlement-batch-001.csv"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::payflow-transaction-data/2026/09/settlement-batch-001.csv"
+        },
+        {
+          "accountId": "123456789012",
+          "type": "AWS::S3::Bucket",
+          "ARN": "arn:aws:s3:::payflow-transaction-data"
+        }
+      ],
+      "eventID": "scen1-evt-02",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAPAYMENTSERVICE:DevJoe",
+        "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIAV1PAYMENTKEY123",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAPAYMENTSERVICE",
+            "arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+            "accountId": "123456789012",
+            "userName": "PaymentServiceRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T14:23:40Z",
+      "eventSource": "kms.amazonaws.com",
+      "eventName": "Decrypt",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.44",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "keyId": "alias/payment-token-key"
+      },
+      "resources": [
+        {
+          "accountId": "123456789012",
+          "type": "AWS::KMS::Key",
+          "ARN": "arn:aws:kms:us-east-1:123456789012:key/b841a547-0e6d-4c3e-9081-39c8942ef3a9"
+        }
+      ],
+      "eventID": "scen1-evt-03",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROAPAYMENTSERVICE:DevJoe",
+        "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIAV1PAYMENTKEY123",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROAPAYMENTSERVICE",
+            "arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+            "accountId": "123456789012",
+            "userName": "PaymentServiceRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T14:25:05Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.44",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "bucketName": "payflow-account-data",
+        "key": "2026/09/ledger-accounts.json"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::payflow-account-data/2026/09/ledger-accounts.json"
+        },
+        {
+          "accountId": "123456789012",
+          "type": "AWS::S3::Bucket",
+          "ARN": "arn:aws:s3:::payflow-account-data"
+        }
+      ],
+      "eventID": "scen1-evt-04",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWADMIN",
+        "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+        "accountId": "123456789012",
+        "userName": "SecurityAdmin"
+      },
+      "eventTime": "2026-09-15T16:00:00Z",
+      "eventSource": "signin.amazonaws.com",
+      "eventName": "ConsoleLogin",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "Mozilla/5.0",
+      "responseElements": {
+        "ConsoleLogin": "Success"
+      },
+      "eventID": "scen3-evt-01",
+      "readOnly": false,
+      "eventType": "AwsConsoleSignIn"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWADMIN",
+        "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+        "accountId": "123456789012",
+        "userName": "SecurityAdmin"
+      },
+      "eventTime": "2026-09-15T16:05:00Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "CreateRole",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "roleName": "BackdoorAdminRole",
+        "description": "Maintenance role"
+      },
+      "responseElements": {
+        "role": {
+          "roleName": "BackdoorAdminRole",
+          "arn": "arn:aws:iam::123456789012:role/BackdoorAdminRole"
+        }
+      },
+      "eventID": "scen3-evt-02",
+      "readOnly": false,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWADMIN",
+        "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+        "accountId": "123456789012",
+        "userName": "SecurityAdmin"
+      },
+      "eventTime": "2026-09-15T16:06:15Z",
+      "eventSource": "iam.amazonaws.com",
+      "eventName": "PutRolePolicy",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "roleName": "BackdoorAdminRole",
+        "policyName": "FullAdminPolicy"
+      },
+      "eventID": "scen3-evt-03",
+      "readOnly": false,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWADMIN",
+        "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+        "accountId": "123456789012",
+        "userName": "SecurityAdmin"
+      },
+      "eventTime": "2026-09-15T16:08:00Z",
+      "eventSource": "sts.amazonaws.com",
+      "eventName": "AssumeRole",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "roleArn": "arn:aws:iam::123456789012:role/BackdoorAdminRole",
+        "roleSessionName": "BackdoorSession"
+      },
+      "responseElements": {
+        "credentials": {
+          "accessKeyId": "ASIABACKDOORKEY",
+          "expiration": "2026-09-15T17:08:00Z"
+        },
+        "assumedRoleUser": {
+          "assumedRoleId": "AROABACKDOOR:BackdoorSession",
+          "arn": "arn:aws:sts::123456789012:assumed-role/BackdoorAdminRole/BackdoorSession"
+        }
+      },
+      "eventID": "scen3-evt-04",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "AssumedRole",
+        "principalId": "AROABACKDOOR:BackdoorSession",
+        "arn": "arn:aws:sts::123456789012:assumed-role/BackdoorAdminRole/BackdoorSession",
+        "accountId": "123456789012",
+        "accessKeyId": "ASIABACKDOORKEY",
+        "sessionContext": {
+          "sessionIssuer": {
+            "type": "Role",
+            "principalId": "AROABACKDOOR",
+            "arn": "arn:aws:iam::123456789012:role/BackdoorAdminRole",
+            "accountId": "123456789012",
+            "userName": "BackdoorAdminRole"
+          }
+        }
+      },
+      "eventTime": "2026-09-15T16:10:00Z",
+      "eventSource": "cloudtrail.amazonaws.com",
+      "eventName": "DeleteTrail",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "198.51.100.99",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "name": "payflow-audit-trail"
+      },
+      "resources": [
+        {
+          "accountId": "123456789012",
+          "type": "AWS::CloudTrail::Trail",
+          "ARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/payflow-audit-trail"
+        }
+      ],
+      "eventID": "scen3-evt-05",
+      "readOnly": false,
+      "eventType": "AwsApiCall"
+    }
+  ]
+}

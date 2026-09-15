@@ -1,0 +1,74 @@
+{
+  "Records": [
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWDEVBOB",
+        "arn": "arn:aws:iam::123456789012:user/DevBob",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAV4DEVBOBKEY",
+        "userName": "DevBob"
+      },
+      "eventTime": "2026-09-15T17:00:00Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "GetObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "192.0.2.77",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "bucketName": "payflow-transaction-data",
+        "key": "2026/09/settlement.csv"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::payflow-transaction-data/2026/09/settlement.csv"
+        },
+        {
+          "accountId": "123456789012",
+          "type": "AWS::S3::Bucket",
+          "ARN": "arn:aws:s3:::payflow-transaction-data"
+        }
+      ],
+      "eventID": "scen4-evt-01",
+      "readOnly": true,
+      "eventType": "AwsApiCall"
+    },
+    {
+      "eventVersion": "1.08",
+      "userIdentity": {
+        "type": "IAMUser",
+        "principalId": "AIDAPAYFLOWDEVBOB",
+        "arn": "arn:aws:iam::123456789012:user/DevBob",
+        "accountId": "123456789012",
+        "accessKeyId": "AKIAV4DEVBOBKEY",
+        "userName": "DevBob"
+      },
+      "eventTime": "2026-09-15T17:02:15Z",
+      "eventSource": "s3.amazonaws.com",
+      "eventName": "PutObject",
+      "awsRegion": "us-east-1",
+      "sourceIPAddress": "192.0.2.77",
+      "userAgent": "aws-cli/2.13.0",
+      "requestParameters": {
+        "bucketName": "payflow-external-staging-bucket",
+        "key": "settlement-backup.csv"
+      },
+      "resources": [
+        {
+          "type": "AWS::S3::Object",
+          "ARN": "arn:aws:s3:::payflow-external-staging-bucket/settlement-backup.csv"
+        },
+        {
+          "accountId": "123456789012",
+          "type": "AWS::S3::Bucket",
+          "ARN": "arn:aws:s3:::payflow-external-staging-bucket"
+        }
+      ],
+      "eventID": "scen4-evt-02",
+      "readOnly": false,
+      "eventType": "AwsApiCall"
+    }
+  ]
+}
