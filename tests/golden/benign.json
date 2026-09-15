@@ -1,0 +1,229 @@
+{
+  "time_window_start": "2026-09-15T18:00:00Z",
+  "time_window_end": "2026-09-15T18:06:00Z",
+  "total_events": 3,
+  "parsed_events": 3,
+  "error_events": 0,
+  "identities": [
+    {
+      "type": "AssumedRole",
+      "principal_id": "AROAPAYMENTSERVICE:payment-worker-1",
+      "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/payment-worker-1",
+      "account_id": "123456789012",
+      "session_name": "payment-worker-1",
+      "session_issuer_arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+      "session_issuer_name": "PaymentServiceRole",
+      "access_key_id": "ASIAPAYMENTROUTINE",
+      "correlation_confidence": "UNDETERMINED"
+    },
+    {
+      "type": "AWSService",
+      "user_name": "events.amazonaws.com",
+      "correlation_confidence": "OBSERVED"
+    }
+  ],
+  "affected_assets": [
+    {
+      "arn": "arn:aws:s3:::payflow-application-logs/2026/09/app-info.log",
+      "type": "s3:object",
+      "name": "payflow-application-logs/2026/09/app-info.log",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "infrastructure",
+        "asset_type": "application_logs",
+        "sensitivity": "LOW",
+        "description": "Standard application runtime logs and debugging output",
+        "rule_source": "application.*log|app.*log"
+      },
+      "details": {
+        "bucket": "payflow-application-logs",
+        "key": "2026/09/app-info.log"
+      }
+    },
+    {
+      "type": "sqs:queue",
+      "name": "payment-events",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "fintech",
+        "asset_type": "payment_data",
+        "sensitivity": "HIGH",
+        "description": "Asynchronous payment processing queues and transaction events",
+        "rule_source": "payment.*event|payment.*queue|transaction.*queue"
+      },
+      "details": {
+        "queueUrl": "https://sqs.us-east-1.amazonaws.com/123456789012/payment-events"
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "path-1",
+      "title": "Observed Path #1: events.amazonaws.com activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "events.amazonaws.com",
+          "detail": "AWSService:events.amazonaws.com",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Action",
+          "label": "sts:AssumeRole",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "benign-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T18:00:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "events.amazonaws.com",
+            "field_evidence": {
+              "userAgent": "AWS-Events"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "ScheduledMaintenanceRole",
+          "detail": "iam:role",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "benign-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T18:00:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "events.amazonaws.com",
+            "field_evidence": {
+              "userAgent": "AWS-Events"
+            }
+          }
+        }
+      ],
+      "confidence": "OBSERVED",
+      "evidence": [
+        {
+          "event_id": "benign-evt-01",
+          "record_index": 0,
+          "timestamp": "2026-09-15T18:00:00Z",
+          "event_source": "sts.amazonaws.com",
+          "event_name": "AssumeRole",
+          "source_ip": "events.amazonaws.com",
+          "field_evidence": {
+            "userAgent": "AWS-Events"
+          }
+        }
+      ],
+      "summary": "Identity events.amazonaws.com executed 1 observed actions across 1 resources."
+    },
+    {
+      "id": "path-2",
+      "title": "Observed Path #2: PaymentServiceRole/payment-worker-1 activity",
+      "nodes": [
+        {
+          "type": "Session",
+          "label": "PaymentServiceRole/payment-worker-1",
+          "detail": "Assumed role session (origin undetermined in provided logs)",
+          "confidence": "UNDETERMINED"
+        },
+        {
+          "type": "Action",
+          "label": "sqs:ReceiveMessage",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "benign-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T18:05:00Z",
+            "event_source": "sqs.amazonaws.com",
+            "event_name": "ReceiveMessage",
+            "source_ip": "10.0.12.34",
+            "field_evidence": {
+              "userAgent": "aws-sdk-go/v1.44.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payment-events",
+          "detail": "sqs:queue [payment_data - HIGH]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "benign-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T18:05:00Z",
+            "event_source": "sqs.amazonaws.com",
+            "event_name": "ReceiveMessage",
+            "source_ip": "10.0.12.34",
+            "field_evidence": {
+              "userAgent": "aws-sdk-go/v1.44.0"
+            }
+          }
+        },
+        {
+          "type": "Action",
+          "label": "s3:GetObject",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "benign-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T18:06:00Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "10.0.12.34",
+            "field_evidence": {
+              "userAgent": "aws-sdk-go/v1.44.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payflow-application-logs/2026/09/app-info.log",
+          "detail": "s3:object [application_logs - LOW]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "benign-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T18:06:00Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "10.0.12.34",
+            "field_evidence": {
+              "userAgent": "aws-sdk-go/v1.44.0"
+            }
+          }
+        }
+      ],
+      "confidence": "OBSERVED",
+      "evidence": [
+        {
+          "event_id": "benign-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T18:05:00Z",
+          "event_source": "sqs.amazonaws.com",
+          "event_name": "ReceiveMessage",
+          "source_ip": "10.0.12.34",
+          "field_evidence": {
+            "userAgent": "aws-sdk-go/v1.44.0"
+          }
+        },
+        {
+          "event_id": "benign-evt-03",
+          "record_index": 2,
+          "timestamp": "2026-09-15T18:06:00Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "10.0.12.34",
+          "field_evidence": {
+            "userAgent": "aws-sdk-go/v1.44.0"
+          }
+        }
+      ],
+      "summary": "Identity PaymentServiceRole/payment-worker-1 executed 2 observed actions across 2 resources."
+    }
+  ],
+  "findings": null,
+  "assessment_statement": "Activity is consistent with routine authorized operations. No sensitive resource access, privilege escalation, or destructive actions were established by the supplied evidence."
+}

@@ -1,0 +1,466 @@
+{
+  "time_window_start": "2026-09-15T14:20:00Z",
+  "time_window_end": "2026-09-15T14:25:05Z",
+  "total_events": 4,
+  "parsed_events": 4,
+  "error_events": 0,
+  "identities": [
+    {
+      "type": "IAMUser",
+      "principal_id": "AIDAPAYFLOWDEVJOE",
+      "arn": "arn:aws:iam::123456789012:user/DevJoe",
+      "account_id": "123456789012",
+      "user_name": "DevJoe",
+      "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+      "correlation_confidence": "OBSERVED"
+    },
+    {
+      "type": "AssumedRole",
+      "principal_id": "AROAPAYMENTSERVICE:DevJoe",
+      "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe",
+      "account_id": "123456789012",
+      "session_name": "DevJoe",
+      "session_issuer_arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+      "session_issuer_name": "PaymentServiceRole",
+      "access_key_id": "ASIAV1PAYMENTKEY123",
+      "parent_identity": {
+        "type": "IAMUser",
+        "principal_id": "AIDAPAYFLOWDEVJOE",
+        "arn": "arn:aws:iam::123456789012:user/DevJoe",
+        "account_id": "123456789012",
+        "user_name": "DevJoe",
+        "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+        "correlation_confidence": "OBSERVED"
+      },
+      "correlation_confidence": "CORRELATED"
+    }
+  ],
+  "affected_assets": [
+    {
+      "type": "kms:key",
+      "name": "alias/payment-token-key",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "fintech",
+        "asset_type": "payment_credentials",
+        "sensitivity": "CRITICAL",
+        "description": "Cryptographic keys used to encrypt tokens, card data, and authorizations",
+        "rule_source": "payment.*token.*key|payment.*key|payment.*credentials|card.*data"
+      }
+    },
+    {
+      "arn": "arn:aws:s3:::payflow-account-data/2026/09/ledger-accounts.json",
+      "type": "s3:object",
+      "name": "payflow-account-data/2026/09/ledger-accounts.json",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "fintech",
+        "asset_type": "account_data",
+        "sensitivity": "HIGH",
+        "description": "Customer bank accounts, balances, and account routing info",
+        "rule_source": "account.*data|account.*records"
+      },
+      "details": {
+        "bucket": "payflow-account-data",
+        "key": "2026/09/ledger-accounts.json"
+      }
+    },
+    {
+      "arn": "arn:aws:s3:::payflow-transaction-data/2026/09/settlement-batch-001.csv",
+      "type": "s3:object",
+      "name": "payflow-transaction-data/2026/09/settlement-batch-001.csv",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "fintech",
+        "asset_type": "transaction_data",
+        "sensitivity": "CRITICAL",
+        "description": "Financial transaction records, ledger history, and settlement details",
+        "rule_source": "transaction.*data"
+      },
+      "details": {
+        "bucket": "payflow-transaction-data",
+        "key": "2026/09/settlement-batch-001.csv"
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "path-1",
+      "title": "Observed Path #1: DevJoe activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "DevJoe",
+          "detail": "IAMUser:DevJoe",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Action",
+          "label": "sts:AssumeRole",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T14:20:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "PaymentServiceRole",
+          "detail": "iam:role",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T14:20:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        }
+      ],
+      "confidence": "OBSERVED",
+      "evidence": [
+        {
+          "event_id": "scen1-evt-01",
+          "record_index": 0,
+          "timestamp": "2026-09-15T14:20:00Z",
+          "event_source": "sts.amazonaws.com",
+          "event_name": "AssumeRole",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "summary": "Identity DevJoe executed 1 observed actions across 1 resources."
+    },
+    {
+      "id": "path-2",
+      "title": "Observed Path #2: PaymentServiceRole/DevJoe activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "DevJoe",
+          "detail": "IAMUser:DevJoe",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Role",
+          "label": "PaymentServiceRole",
+          "detail": "AssumeRole -\u003e PaymentServiceRole",
+          "confidence": "CORRELATED"
+        },
+        {
+          "type": "Session",
+          "label": "PaymentServiceRole/DevJoe",
+          "detail": "Session: DevJoe",
+          "confidence": "CORRELATED"
+        },
+        {
+          "type": "Action",
+          "label": "s3:GetObject",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T14:22:15Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payflow-transaction-data/2026/09/settlement-batch-001.csv",
+          "detail": "s3:object [transaction_data - CRITICAL]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T14:22:15Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Action",
+          "label": "kms:Decrypt",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T14:23:40Z",
+            "event_source": "kms.amazonaws.com",
+            "event_name": "Decrypt",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "alias/payment-token-key",
+          "detail": "kms:key [payment_credentials - CRITICAL]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T14:23:40Z",
+            "event_source": "kms.amazonaws.com",
+            "event_name": "Decrypt",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Action",
+          "label": "s3:GetObject",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-04",
+            "record_index": 3,
+            "timestamp": "2026-09-15T14:25:05Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payflow-account-data/2026/09/ledger-accounts.json",
+          "detail": "s3:object [account_data - HIGH]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen1-evt-04",
+            "record_index": 3,
+            "timestamp": "2026-09-15T14:25:05Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "198.51.100.44",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        }
+      ],
+      "confidence": "CORRELATED",
+      "evidence": [
+        {
+          "event_id": "scen1-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T14:22:15Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen1-evt-03",
+          "record_index": 2,
+          "timestamp": "2026-09-15T14:23:40Z",
+          "event_source": "kms.amazonaws.com",
+          "event_name": "Decrypt",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen1-evt-04",
+          "record_index": 3,
+          "timestamp": "2026-09-15T14:25:05Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "summary": "Identity PaymentServiceRole/DevJoe executed 3 observed actions across 3 resources."
+    }
+  ],
+  "findings": [
+    {
+      "id": "impact-1",
+      "title": "Observed Access to Sensitive Fintech Data",
+      "description": "CloudTrail evidence confirms access to sensitive resources: payflow-transaction-data/2026/09/settlement-batch-001.csv (transaction_data / CRITICAL), payflow-account-data/2026/09/ledger-accounts.json (account_data / HIGH).",
+      "severity": "CRITICAL",
+      "confidence": "OBSERVED",
+      "affected_resources": [
+        {
+          "arn": "arn:aws:s3:::payflow-transaction-data/2026/09/settlement-batch-001.csv",
+          "type": "s3:object",
+          "name": "payflow-transaction-data/2026/09/settlement-batch-001.csv",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "classification": {
+            "domain": "fintech",
+            "asset_type": "transaction_data",
+            "sensitivity": "CRITICAL",
+            "description": "Financial transaction records, ledger history, and settlement details",
+            "rule_source": "transaction.*data"
+          },
+          "details": {
+            "bucket": "payflow-transaction-data",
+            "key": "2026/09/settlement-batch-001.csv"
+          }
+        },
+        {
+          "arn": "arn:aws:s3:::payflow-account-data/2026/09/ledger-accounts.json",
+          "type": "s3:object",
+          "name": "payflow-account-data/2026/09/ledger-accounts.json",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "classification": {
+            "domain": "fintech",
+            "asset_type": "account_data",
+            "sensitivity": "HIGH",
+            "description": "Customer bank accounts, balances, and account routing info",
+            "rule_source": "account.*data|account.*records"
+          },
+          "details": {
+            "bucket": "payflow-account-data",
+            "key": "2026/09/ledger-accounts.json"
+          }
+        }
+      ],
+      "identities": [
+        {
+          "type": "AssumedRole",
+          "principal_id": "AROAPAYMENTSERVICE:DevJoe",
+          "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe",
+          "account_id": "123456789012",
+          "session_name": "DevJoe",
+          "session_issuer_arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+          "session_issuer_name": "PaymentServiceRole",
+          "access_key_id": "ASIAV1PAYMENTKEY123",
+          "parent_identity": {
+            "type": "IAMUser",
+            "principal_id": "AIDAPAYFLOWDEVJOE",
+            "arn": "arn:aws:iam::123456789012:user/DevJoe",
+            "account_id": "123456789012",
+            "user_name": "DevJoe",
+            "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+            "correlation_confidence": "OBSERVED"
+          },
+          "correlation_confidence": "CORRELATED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen1-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T14:22:15Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen1-evt-04",
+          "record_index": 3,
+          "timestamp": "2026-09-15T14:25:05Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "evidence_basis": "Direct s3:GetObject API calls recorded with success response.",
+      "limitations": "The supplied CloudTrail evidence establishes resource access. It does not by itself establish data exfiltration beyond the AWS environment."
+    },
+    {
+      "id": "impact-2",
+      "title": "Observed Cryptographic Decryption of Sensitive Keys",
+      "description": "CloudTrail evidence records 1 kms:Decrypt operations involving cryptographic keys.",
+      "severity": "CRITICAL",
+      "confidence": "OBSERVED",
+      "affected_resources": [
+        {
+          "type": "kms:key",
+          "name": "alias/payment-token-key",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "classification": {
+            "domain": "fintech",
+            "asset_type": "payment_credentials",
+            "sensitivity": "CRITICAL",
+            "description": "Cryptographic keys used to encrypt tokens, card data, and authorizations",
+            "rule_source": "payment.*token.*key|payment.*key|payment.*credentials|card.*data"
+          }
+        }
+      ],
+      "identities": [
+        {
+          "type": "AssumedRole",
+          "principal_id": "AROAPAYMENTSERVICE:DevJoe",
+          "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/DevJoe",
+          "account_id": "123456789012",
+          "session_name": "DevJoe",
+          "session_issuer_arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+          "session_issuer_name": "PaymentServiceRole",
+          "access_key_id": "ASIAV1PAYMENTKEY123",
+          "parent_identity": {
+            "type": "IAMUser",
+            "principal_id": "AIDAPAYFLOWDEVJOE",
+            "arn": "arn:aws:iam::123456789012:user/DevJoe",
+            "account_id": "123456789012",
+            "user_name": "DevJoe",
+            "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+            "correlation_confidence": "OBSERVED"
+          },
+          "correlation_confidence": "CORRELATED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen1-evt-03",
+          "record_index": 2,
+          "timestamp": "2026-09-15T14:23:40Z",
+          "event_source": "kms.amazonaws.com",
+          "event_name": "Decrypt",
+          "source_ip": "198.51.100.44",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "evidence_basis": "Direct kms:Decrypt API call successfully processed.",
+      "limitations": "Evidence confirms decryption was performed; decrypted plain-text content is not stored in CloudTrail logs."
+    }
+  ],
+  "assessment_statement": "CloudTrail evidence establishes activity involving identities [DevJoe, PaymentServiceRole/DevJoe]. Access or modification to classified resources was observed: [alias/payment-token-key (payment_credentials / CRITICAL), payflow-account-data/2026/09/ledger-accounts.json (account_data / HIGH), payflow-transaction-data/2026/09/settlement-batch-001.csv (transaction_data / CRITICAL)]. The supplied CloudTrail evidence by itself does not establish that data was exfiltrated beyond the AWS environment."
+}

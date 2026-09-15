@@ -1,0 +1,246 @@
+{
+  "time_window_start": "2026-09-15T15:00:00Z",
+  "time_window_end": "2026-09-15T15:02:30Z",
+  "total_events": 2,
+  "parsed_events": 2,
+  "error_events": 0,
+  "identities": [
+    {
+      "type": "IAMUser",
+      "principal_id": "AIDAPAYFLOWALICE",
+      "arn": "arn:aws:iam::123456789012:user/Alice",
+      "account_id": "123456789012",
+      "user_name": "Alice",
+      "correlation_confidence": "OBSERVED"
+    },
+    {
+      "type": "AssumedRole",
+      "principal_id": "AROAPAYMENTSERVICE:Alice-AdHoc",
+      "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/Alice-AdHoc",
+      "account_id": "123456789012",
+      "session_name": "Alice-AdHoc",
+      "session_issuer_arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+      "session_issuer_name": "PaymentServiceRole",
+      "access_key_id": "ASIAV2ALICEKEY",
+      "parent_identity": {
+        "type": "IAMUser",
+        "principal_id": "AIDAPAYFLOWALICE",
+        "arn": "arn:aws:iam::123456789012:user/Alice",
+        "account_id": "123456789012",
+        "user_name": "Alice",
+        "correlation_confidence": "OBSERVED"
+      },
+      "correlation_confidence": "CORRELATED"
+    }
+  ],
+  "affected_assets": [
+    {
+      "type": "kms:key",
+      "name": "alias/payment-token-key",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "fintech",
+        "asset_type": "payment_credentials",
+        "sensitivity": "CRITICAL",
+        "description": "Cryptographic keys used to encrypt tokens, card data, and authorizations",
+        "rule_source": "payment.*token.*key|payment.*key|payment.*credentials|card.*data"
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "path-1",
+      "title": "Observed Path #1: Alice activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "Alice",
+          "detail": "IAMUser:Alice",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Action",
+          "label": "sts:AssumeRole",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen2-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T15:00:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "203.0.113.88",
+            "field_evidence": {
+              "userAgent": "boto3/1.26.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "PaymentServiceRole",
+          "detail": "iam:role",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen2-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T15:00:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "203.0.113.88",
+            "field_evidence": {
+              "userAgent": "boto3/1.26.0"
+            }
+          }
+        }
+      ],
+      "confidence": "OBSERVED",
+      "evidence": [
+        {
+          "event_id": "scen2-evt-01",
+          "record_index": 0,
+          "timestamp": "2026-09-15T15:00:00Z",
+          "event_source": "sts.amazonaws.com",
+          "event_name": "AssumeRole",
+          "source_ip": "203.0.113.88",
+          "field_evidence": {
+            "userAgent": "boto3/1.26.0"
+          }
+        }
+      ],
+      "summary": "Identity Alice executed 1 observed actions across 1 resources."
+    },
+    {
+      "id": "path-2",
+      "title": "Observed Path #2: PaymentServiceRole/Alice-AdHoc activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "Alice",
+          "detail": "IAMUser:Alice",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Role",
+          "label": "PaymentServiceRole",
+          "detail": "AssumeRole -\u003e PaymentServiceRole",
+          "confidence": "CORRELATED"
+        },
+        {
+          "type": "Session",
+          "label": "PaymentServiceRole/Alice-AdHoc",
+          "detail": "Session: Alice-AdHoc",
+          "confidence": "CORRELATED"
+        },
+        {
+          "type": "Action",
+          "label": "kms:Decrypt",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen2-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T15:02:30Z",
+            "event_source": "kms.amazonaws.com",
+            "event_name": "Decrypt",
+            "source_ip": "203.0.113.88",
+            "field_evidence": {
+              "userAgent": "boto3/1.26.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "alias/payment-token-key",
+          "detail": "kms:key [payment_credentials - CRITICAL]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen2-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T15:02:30Z",
+            "event_source": "kms.amazonaws.com",
+            "event_name": "Decrypt",
+            "source_ip": "203.0.113.88",
+            "field_evidence": {
+              "userAgent": "boto3/1.26.0"
+            }
+          }
+        }
+      ],
+      "confidence": "CORRELATED",
+      "evidence": [
+        {
+          "event_id": "scen2-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T15:02:30Z",
+          "event_source": "kms.amazonaws.com",
+          "event_name": "Decrypt",
+          "source_ip": "203.0.113.88",
+          "field_evidence": {
+            "userAgent": "boto3/1.26.0"
+          }
+        }
+      ],
+      "summary": "Identity PaymentServiceRole/Alice-AdHoc executed 1 observed actions across 1 resources."
+    }
+  ],
+  "findings": [
+    {
+      "id": "impact-1",
+      "title": "Observed Cryptographic Decryption of Sensitive Keys",
+      "description": "CloudTrail evidence records 1 kms:Decrypt operations involving cryptographic keys.",
+      "severity": "CRITICAL",
+      "confidence": "OBSERVED",
+      "affected_resources": [
+        {
+          "type": "kms:key",
+          "name": "alias/payment-token-key",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "classification": {
+            "domain": "fintech",
+            "asset_type": "payment_credentials",
+            "sensitivity": "CRITICAL",
+            "description": "Cryptographic keys used to encrypt tokens, card data, and authorizations",
+            "rule_source": "payment.*token.*key|payment.*key|payment.*credentials|card.*data"
+          }
+        }
+      ],
+      "identities": [
+        {
+          "type": "AssumedRole",
+          "principal_id": "AROAPAYMENTSERVICE:Alice-AdHoc",
+          "arn": "arn:aws:sts::123456789012:assumed-role/PaymentServiceRole/Alice-AdHoc",
+          "account_id": "123456789012",
+          "session_name": "Alice-AdHoc",
+          "session_issuer_arn": "arn:aws:iam::123456789012:role/PaymentServiceRole",
+          "session_issuer_name": "PaymentServiceRole",
+          "access_key_id": "ASIAV2ALICEKEY",
+          "parent_identity": {
+            "type": "IAMUser",
+            "principal_id": "AIDAPAYFLOWALICE",
+            "arn": "arn:aws:iam::123456789012:user/Alice",
+            "account_id": "123456789012",
+            "user_name": "Alice",
+            "correlation_confidence": "OBSERVED"
+          },
+          "correlation_confidence": "CORRELATED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen2-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T15:02:30Z",
+          "event_source": "kms.amazonaws.com",
+          "event_name": "Decrypt",
+          "source_ip": "203.0.113.88",
+          "field_evidence": {
+            "userAgent": "boto3/1.26.0"
+          }
+        }
+      ],
+      "evidence_basis": "Direct kms:Decrypt API call successfully processed.",
+      "limitations": "Evidence confirms decryption was performed; decrypted plain-text content is not stored in CloudTrail logs."
+    }
+  ],
+  "assessment_statement": "CloudTrail evidence establishes activity involving identities [Alice, PaymentServiceRole/Alice-AdHoc]. Access or modification to classified resources was observed: [alias/payment-token-key (payment_credentials / CRITICAL)]. The supplied CloudTrail evidence by itself does not establish that data was exfiltrated beyond the AWS environment."
+}

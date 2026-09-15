@@ -1,0 +1,413 @@
+{
+  "time_window_start": "2026-09-15T16:00:00Z",
+  "time_window_end": "2026-09-15T16:10:00Z",
+  "total_events": 5,
+  "parsed_events": 5,
+  "error_events": 0,
+  "identities": [
+    {
+      "type": "AssumedRole",
+      "principal_id": "AROABACKDOOR:BackdoorSession",
+      "arn": "arn:aws:sts::123456789012:assumed-role/BackdoorAdminRole/BackdoorSession",
+      "account_id": "123456789012",
+      "session_name": "BackdoorSession",
+      "session_issuer_arn": "arn:aws:iam::123456789012:role/BackdoorAdminRole",
+      "session_issuer_name": "BackdoorAdminRole",
+      "access_key_id": "ASIABACKDOORKEY",
+      "parent_identity": {
+        "type": "IAMUser",
+        "principal_id": "AIDAPAYFLOWADMIN",
+        "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+        "account_id": "123456789012",
+        "user_name": "SecurityAdmin",
+        "correlation_confidence": "OBSERVED"
+      },
+      "correlation_confidence": "CORRELATED"
+    },
+    {
+      "type": "IAMUser",
+      "principal_id": "AIDAPAYFLOWADMIN",
+      "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+      "account_id": "123456789012",
+      "user_name": "SecurityAdmin",
+      "correlation_confidence": "OBSERVED"
+    }
+  ],
+  "affected_assets": [
+    {
+      "type": "cloudtrail:trail",
+      "name": "payflow-audit-trail",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "compliance",
+        "asset_type": "audit_data",
+        "sensitivity": "HIGH",
+        "description": "Immutable security audit logs and regulatory trail archives",
+        "rule_source": "audit.*trail|audit.*log|cloudtrail"
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "path-1",
+      "title": "Observed Path #1: SecurityAdmin activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "SecurityAdmin",
+          "detail": "IAMUser:SecurityAdmin",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Action",
+          "label": "iam:CreateRole",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T16:05:00Z",
+            "event_source": "iam.amazonaws.com",
+            "event_name": "CreateRole",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "BackdoorAdminRole",
+          "detail": "iam:role",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T16:05:00Z",
+            "event_source": "iam.amazonaws.com",
+            "event_name": "CreateRole",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Action",
+          "label": "iam:PutRolePolicy",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T16:06:15Z",
+            "event_source": "iam.amazonaws.com",
+            "event_name": "PutRolePolicy",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "BackdoorAdminRole",
+          "detail": "iam:role",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T16:06:15Z",
+            "event_source": "iam.amazonaws.com",
+            "event_name": "PutRolePolicy",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "FullAdminPolicy",
+          "detail": "iam:policy",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-03",
+            "record_index": 2,
+            "timestamp": "2026-09-15T16:06:15Z",
+            "event_source": "iam.amazonaws.com",
+            "event_name": "PutRolePolicy",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Action",
+          "label": "sts:AssumeRole",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-04",
+            "record_index": 3,
+            "timestamp": "2026-09-15T16:08:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "BackdoorAdminRole",
+          "detail": "iam:role",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-04",
+            "record_index": 3,
+            "timestamp": "2026-09-15T16:08:00Z",
+            "event_source": "sts.amazonaws.com",
+            "event_name": "AssumeRole",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        }
+      ],
+      "confidence": "OBSERVED",
+      "evidence": [
+        {
+          "event_id": "scen3-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T16:05:00Z",
+          "event_source": "iam.amazonaws.com",
+          "event_name": "CreateRole",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen3-evt-03",
+          "record_index": 2,
+          "timestamp": "2026-09-15T16:06:15Z",
+          "event_source": "iam.amazonaws.com",
+          "event_name": "PutRolePolicy",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen3-evt-04",
+          "record_index": 3,
+          "timestamp": "2026-09-15T16:08:00Z",
+          "event_source": "sts.amazonaws.com",
+          "event_name": "AssumeRole",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "summary": "Identity SecurityAdmin executed 3 observed actions across 3 resources."
+    },
+    {
+      "id": "path-2",
+      "title": "Observed Path #2: BackdoorAdminRole/BackdoorSession activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "SecurityAdmin",
+          "detail": "IAMUser:SecurityAdmin",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Role",
+          "label": "BackdoorAdminRole",
+          "detail": "AssumeRole -\u003e BackdoorAdminRole",
+          "confidence": "CORRELATED"
+        },
+        {
+          "type": "Session",
+          "label": "BackdoorAdminRole/BackdoorSession",
+          "detail": "Session: BackdoorSession",
+          "confidence": "CORRELATED"
+        },
+        {
+          "type": "Action",
+          "label": "cloudtrail:DeleteTrail",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-05",
+            "record_index": 4,
+            "timestamp": "2026-09-15T16:10:00Z",
+            "event_source": "cloudtrail.amazonaws.com",
+            "event_name": "DeleteTrail",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payflow-audit-trail",
+          "detail": "cloudtrail:trail [audit_data - HIGH]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen3-evt-05",
+            "record_index": 4,
+            "timestamp": "2026-09-15T16:10:00Z",
+            "event_source": "cloudtrail.amazonaws.com",
+            "event_name": "DeleteTrail",
+            "source_ip": "198.51.100.99",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        }
+      ],
+      "confidence": "CORRELATED",
+      "evidence": [
+        {
+          "event_id": "scen3-evt-05",
+          "record_index": 4,
+          "timestamp": "2026-09-15T16:10:00Z",
+          "event_source": "cloudtrail.amazonaws.com",
+          "event_name": "DeleteTrail",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "summary": "Identity BackdoorAdminRole/BackdoorSession executed 1 observed actions across 1 resources."
+    }
+  ],
+  "findings": [
+    {
+      "id": "impact-1",
+      "title": "Observed Administrative Role / Policy Creation",
+      "description": "IAM configuration changes creating or escalating roles and policies were observed in the event stream.",
+      "severity": "HIGH",
+      "confidence": "OBSERVED",
+      "affected_resources": [
+        {
+          "arn": "arn:aws:iam::123456789012:role/BackdoorAdminRole",
+          "type": "iam:role",
+          "name": "BackdoorAdminRole",
+          "account_id": "123456789012"
+        },
+        {
+          "arn": "arn:aws:iam::123456789012:role/BackdoorAdminRole",
+          "type": "iam:role",
+          "name": "BackdoorAdminRole",
+          "account_id": "123456789012"
+        },
+        {
+          "type": "iam:policy",
+          "name": "FullAdminPolicy",
+          "account_id": "123456789012"
+        }
+      ],
+      "identities": [
+        {
+          "type": "IAMUser",
+          "principal_id": "AIDAPAYFLOWADMIN",
+          "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+          "account_id": "123456789012",
+          "user_name": "SecurityAdmin",
+          "correlation_confidence": "OBSERVED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen3-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T16:05:00Z",
+          "event_source": "iam.amazonaws.com",
+          "event_name": "CreateRole",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen3-evt-03",
+          "record_index": 2,
+          "timestamp": "2026-09-15T16:06:15Z",
+          "event_source": "iam.amazonaws.com",
+          "event_name": "PutRolePolicy",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "evidence_basis": "Direct IAM administrative API calls recorded with success.",
+      "limitations": "Activity is consistent with administrative configuration changes or persistence; compromise cannot be asserted without credential authorization context."
+    },
+    {
+      "id": "impact-2",
+      "title": "Observed Audit Trail / Resource Deletion",
+      "description": "Destructive operations impacting audit visibility or resources were observed.",
+      "severity": "CRITICAL",
+      "confidence": "OBSERVED",
+      "affected_resources": [
+        {
+          "type": "cloudtrail:trail",
+          "name": "payflow-audit-trail",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "classification": {
+            "domain": "compliance",
+            "asset_type": "audit_data",
+            "sensitivity": "HIGH",
+            "description": "Immutable security audit logs and regulatory trail archives",
+            "rule_source": "audit.*trail|audit.*log|cloudtrail"
+          }
+        }
+      ],
+      "identities": [
+        {
+          "type": "AssumedRole",
+          "principal_id": "AROABACKDOOR:BackdoorSession",
+          "arn": "arn:aws:sts::123456789012:assumed-role/BackdoorAdminRole/BackdoorSession",
+          "account_id": "123456789012",
+          "session_name": "BackdoorSession",
+          "session_issuer_arn": "arn:aws:iam::123456789012:role/BackdoorAdminRole",
+          "session_issuer_name": "BackdoorAdminRole",
+          "access_key_id": "ASIABACKDOORKEY",
+          "parent_identity": {
+            "type": "IAMUser",
+            "principal_id": "AIDAPAYFLOWADMIN",
+            "arn": "arn:aws:iam::123456789012:user/SecurityAdmin",
+            "account_id": "123456789012",
+            "user_name": "SecurityAdmin",
+            "correlation_confidence": "OBSERVED"
+          },
+          "correlation_confidence": "CORRELATED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen3-evt-05",
+          "record_index": 4,
+          "timestamp": "2026-09-15T16:10:00Z",
+          "event_source": "cloudtrail.amazonaws.com",
+          "event_name": "DeleteTrail",
+          "source_ip": "198.51.100.99",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "evidence_basis": "Destructive API call recorded with success.",
+      "limitations": "Logs establish that trail/resource was deleted; subsequent unlogged activity may have occurred after logging ceased."
+    }
+  ],
+  "assessment_statement": "CloudTrail evidence establishes activity involving identities [BackdoorAdminRole/BackdoorSession, SecurityAdmin]. Access or modification to classified resources was observed: [payflow-audit-trail (audit_data / HIGH)]. The supplied CloudTrail evidence by itself does not establish that data was exfiltrated beyond the AWS environment."
+}

@@ -1,0 +1,244 @@
+{
+  "time_window_start": "2026-09-15T17:00:00Z",
+  "time_window_end": "2026-09-15T17:02:15Z",
+  "total_events": 2,
+  "parsed_events": 2,
+  "error_events": 0,
+  "identities": [
+    {
+      "type": "IAMUser",
+      "principal_id": "AIDAPAYFLOWDEVBOB",
+      "arn": "arn:aws:iam::123456789012:user/DevBob",
+      "account_id": "123456789012",
+      "user_name": "DevBob",
+      "access_key_id": "AKIAV4DEVBOBKEY",
+      "correlation_confidence": "OBSERVED"
+    }
+  ],
+  "affected_assets": [
+    {
+      "arn": "arn:aws:s3:::payflow-transaction-data/2026/09/settlement.csv",
+      "type": "s3:object",
+      "name": "payflow-transaction-data/2026/09/settlement.csv",
+      "account_id": "123456789012",
+      "region": "us-east-1",
+      "classification": {
+        "domain": "fintech",
+        "asset_type": "transaction_data",
+        "sensitivity": "CRITICAL",
+        "description": "Financial transaction records, ledger history, and settlement details",
+        "rule_source": "transaction.*data"
+      },
+      "details": {
+        "bucket": "payflow-transaction-data",
+        "key": "2026/09/settlement.csv"
+      }
+    }
+  ],
+  "paths": [
+    {
+      "id": "path-1",
+      "title": "Observed Path #1: DevBob activity",
+      "nodes": [
+        {
+          "type": "Identity",
+          "label": "DevBob",
+          "detail": "IAMUser:DevBob",
+          "confidence": "OBSERVED"
+        },
+        {
+          "type": "Action",
+          "label": "s3:GetObject",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen4-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T17:00:00Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "192.0.2.77",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payflow-transaction-data/2026/09/settlement.csv",
+          "detail": "s3:object [transaction_data - CRITICAL]",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen4-evt-01",
+            "record_index": 0,
+            "timestamp": "2026-09-15T17:00:00Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "GetObject",
+            "source_ip": "192.0.2.77",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Action",
+          "label": "s3:PutObject",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen4-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T17:02:15Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "PutObject",
+            "source_ip": "192.0.2.77",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        },
+        {
+          "type": "Resource",
+          "label": "payflow-external-staging-bucket/settlement-backup.csv",
+          "detail": "s3:object",
+          "confidence": "OBSERVED",
+          "evidence_ref": {
+            "event_id": "scen4-evt-02",
+            "record_index": 1,
+            "timestamp": "2026-09-15T17:02:15Z",
+            "event_source": "s3.amazonaws.com",
+            "event_name": "PutObject",
+            "source_ip": "192.0.2.77",
+            "field_evidence": {
+              "userAgent": "aws-cli/2.13.0"
+            }
+          }
+        }
+      ],
+      "confidence": "OBSERVED",
+      "evidence": [
+        {
+          "event_id": "scen4-evt-01",
+          "record_index": 0,
+          "timestamp": "2026-09-15T17:00:00Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "192.0.2.77",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen4-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T17:02:15Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "PutObject",
+          "source_ip": "192.0.2.77",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "summary": "Identity DevBob executed 2 observed actions across 2 resources."
+    }
+  ],
+  "findings": [
+    {
+      "id": "impact-1",
+      "title": "Observed Access to Sensitive Fintech Data",
+      "description": "CloudTrail evidence confirms access to sensitive resources: payflow-transaction-data/2026/09/settlement.csv (transaction_data / CRITICAL).",
+      "severity": "CRITICAL",
+      "confidence": "OBSERVED",
+      "affected_resources": [
+        {
+          "arn": "arn:aws:s3:::payflow-transaction-data/2026/09/settlement.csv",
+          "type": "s3:object",
+          "name": "payflow-transaction-data/2026/09/settlement.csv",
+          "account_id": "123456789012",
+          "region": "us-east-1",
+          "classification": {
+            "domain": "fintech",
+            "asset_type": "transaction_data",
+            "sensitivity": "CRITICAL",
+            "description": "Financial transaction records, ledger history, and settlement details",
+            "rule_source": "transaction.*data"
+          },
+          "details": {
+            "bucket": "payflow-transaction-data",
+            "key": "2026/09/settlement.csv"
+          }
+        }
+      ],
+      "identities": [
+        {
+          "type": "IAMUser",
+          "principal_id": "AIDAPAYFLOWDEVBOB",
+          "arn": "arn:aws:iam::123456789012:user/DevBob",
+          "account_id": "123456789012",
+          "user_name": "DevBob",
+          "access_key_id": "AKIAV4DEVBOBKEY",
+          "correlation_confidence": "OBSERVED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen4-evt-01",
+          "record_index": 0,
+          "timestamp": "2026-09-15T17:00:00Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "192.0.2.77",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "evidence_basis": "Direct s3:GetObject API calls recorded with success response.",
+      "limitations": "The supplied CloudTrail evidence establishes resource access. It does not by itself establish data exfiltration beyond the AWS environment."
+    },
+    {
+      "id": "impact-2",
+      "title": "Observed Cross-Bucket Data Movement",
+      "description": "Identity DevBob performed s3:GetObject followed by s3:PutObject across distinct S3 buckets within the same session.",
+      "severity": "HIGH",
+      "confidence": "CORRELATED",
+      "identities": [
+        {
+          "type": "IAMUser",
+          "principal_id": "AIDAPAYFLOWDEVBOB",
+          "arn": "arn:aws:iam::123456789012:user/DevBob",
+          "account_id": "123456789012",
+          "user_name": "DevBob",
+          "access_key_id": "AKIAV4DEVBOBKEY",
+          "correlation_confidence": "OBSERVED"
+        }
+      ],
+      "evidence": [
+        {
+          "event_id": "scen4-evt-01",
+          "record_index": 0,
+          "timestamp": "2026-09-15T17:00:00Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "GetObject",
+          "source_ip": "192.0.2.77",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        },
+        {
+          "event_id": "scen4-evt-02",
+          "record_index": 1,
+          "timestamp": "2026-09-15T17:02:15Z",
+          "event_source": "s3.amazonaws.com",
+          "event_name": "PutObject",
+          "source_ip": "192.0.2.77",
+          "field_evidence": {
+            "userAgent": "aws-cli/2.13.0"
+          }
+        }
+      ],
+      "evidence_basis": "Paired s3:GetObject and s3:PutObject API calls executed within the same session lineage.",
+      "limitations": "Cross-bucket data movement is evidenced. External network exfiltration is not established from CloudTrail alone."
+    }
+  ],
+  "assessment_statement": "CloudTrail evidence establishes activity involving identities [DevBob]. Access or modification to classified resources was observed: [payflow-transaction-data/2026/09/settlement.csv (transaction_data / CRITICAL)]. The supplied CloudTrail evidence by itself does not establish that data was exfiltrated beyond the AWS environment."
+}
